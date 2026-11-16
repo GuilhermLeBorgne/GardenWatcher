@@ -14,7 +14,7 @@ Chaque point se clôt par un ADR dans `adr/` (modèle : `adr/0000-template.md`).
 ## B. Briques externes
 
 - [x] **4. IA / LLM** → [ADR-0003](adr/0003-usage-de-l-ia.md) : un LLM local n'est pas réaliste sur un Pi pour du raisonnement. Une API cloud (ex. Claude) pose les questions de coût, de clé API (fournie par le client ou par nous ?) et de comportement quand l'API est indisponible.
-- [ ] **5. Connaissances** : quelles sources fiables (bases botaniques, INPN, RHS…) ? Faut-il un RAG ou une base structurée (fiches espèces) ? Comment stocker la base hors ligne (SQLite + extension vectorielle ?) ? Comment l'enrichir via une recherche web (étape 3 du userflow) ?
+- [x] **5. Connaissances** → [ADR-0006](adr/0006-base-de-connaissances.md) : quelles sources fiables (bases botaniques, INPN, RHS…) ? Faut-il un RAG ou une base structurée (fiches espèces) ? Comment stocker la base hors ligne (SQLite + extension vectorielle ?) ? Comment l'enrichir via une recherche web (étape 3 du userflow) ?
   - *Acquis (ADR-0003)* : pas de RAG en V1. Les fiches utiles sont envoyées directement à l'IA. L'enrichissement se fait par une recherche web côté API et produit une fiche espèce au format imposé, avec ses sources.
 - [x] **6. Météo** → [ADR-0005](adr/0005-meteo-et-restrictions-d-eau.md) : quel fournisseur (Open-Meteo : gratuit, sans clé ; Météo-France…) ? Quel horizon (court et moyen terme), quelle fréquence de récupération, quel cache local ?
   - *Orientation* : la météo et les alertes passent par des API open data, interrogées quelques fois par jour, **sans IA**. Les alertes sont déclenchées par des règles codées. L'IA reçoit seulement un résumé déjà calculé lors de la planification quotidienne. Point à vérifier : la licence d'Open-Meteo est gratuite uniquement pour un usage non commercial, alors que les données de Météo-France sont sous Licence Ouverte (Etalab).
@@ -45,6 +45,8 @@ Chaque point se clôt par un ADR dans `adr/` (modèle : `adr/0000-template.md`).
     - **Simple** : un arrosage par jour, avec une quantité approximative par plante.
     - **Renforcé** : tient compte des horaires, de la météo (chaleur, vent, pluie) et des besoins de l'espèce.
     - **Expert** : optimisation maximale (plusieurs passages par jour, quantités calculées, données du sol, évaporation).
+  - *Exigence* : **périodes sensibles pour la faune** (ADR-0006). La planification ne propose pas de taille de haie ou d'arbre pendant la nidification, et prévient l'utilisateur s'il en programme une, sans bloquer. La période par défaut est à confirmer d'après les recommandations de l'OFB, et réglable dans la configuration.
+  - *Exigence* : une entité n'entre dans la planification qu'une fois sa fiche de connaissances validée (ADR-0006).
   - *Exigence* : **créneaux de disponibilité par utilisateur** (ex. « le soir en semaine, le matin le week-end »). Les tâches sont placées dans ces créneaux. Le choix du meilleur créneau combine la disponibilité, les besoins de l'entité, la météo et les éventuelles restrictions d'eau appliquées par l'utilisateur.
 - [ ] **11. Modèle de données** : entités, relations, statuts (liste complète), tâches, journal/historique des interventions, géolocalisation pour la carte.
   - À intégrer : le mode d'arrosage de chaque entité, les créneaux de disponibilité de chaque utilisateur, la source d'eau du jardin, les restrictions d'eau appliquées (créneaux interdits saisis par l'utilisateur) et le mode de validation des tâches (ADR-0003).

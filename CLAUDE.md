@@ -26,6 +26,11 @@ Write specs and discussion in French to match the README unless asked otherwise.
 - **Messaging:** Telegram bot, send-only in V1 (no inbound port, no actions from Telegram), with a persistent outgoing queue (ADR-0004).
 - **Weather:** Open-Meteo (non-commercial licence, CC BY 4.0 attribution required), refreshed every 3 hours, with alert thresholds in config (ADR-0005).
 - **Water restrictions:** VigiEau. The tool informs and never enforces: the user chooses whether to apply a restriction and enters the forbidden time slots themselves (ADR-0005).
+- **Knowledge base (ADR-0006):**
+  - Knowledge sheets are shared per species and form the offline knowledge base. Each entity can override any value of its sheet.
+  - The AI's web search is limited to a configurable list of trusted domains. Species identity comes from TAXREF (INPN), without AI.
+  - AI-generated sheets stay as drafts until the user validates them, and an entity only enters planning once its sheet is validated.
+  - Planning respects wildlife-sensitive periods (e.g. no hedge pruning during nesting) by warning, never blocking.
 - **Watering modes** (simple / renforcé / expert) are set per entity. Tasks are scheduled within each user's availability slots (TODO points 10–11).
 
 ## Product concept (from README.md)
