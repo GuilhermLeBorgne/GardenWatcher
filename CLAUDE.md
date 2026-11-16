@@ -81,7 +81,14 @@ Update the glossary whenever a new domain concept appears.
   - The AI's web search is limited to a configurable list of trusted domains. Species identity comes from TAXREF (INPN), without AI.
   - AI-generated sheets stay as drafts until the user validates them, and an entity only enters planning once its sheet is validated.
   - Planning respects wildlife-sensitive periods (e.g. no hedge pruning during nesting) by warning, never blocking.
-- **Watering modes** (simple / renforcé / expert) are set per entity. Tasks are scheduled within each user's availability slots (TODO points 10–11).
+- **Planning engine (ADR-0009):**
+  - **Daily pipeline over a 7-day horizon:** needs (from rules, AI and manual tasks) → constraints → slot placement → validation mode → notification.
+  - **AI is only an advisor:** rules keep planning when it's unavailable.
+  - **The engine never alters a task the user validated or edited:** it proposes a change instead.
+  - **Every task records its source and justification.**
+  - **Watering modes are set per entity:** simple or enhanced in V1, expert later. Simple-mode watering is grouped into one daily notification; enhanced mode sends one notification per entity.
+  - **Hybrid validation:** the hybrid "task type" is action + entity. The validation mode is set per entity, with a garden default.
+  - **Tasks are unassigned in V1:** they're placed where at least one user is available, and notifications go to one shared Telegram group.
 
 ## Product concept (from README.md)
 

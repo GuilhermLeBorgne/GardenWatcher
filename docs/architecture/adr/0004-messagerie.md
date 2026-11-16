@@ -24,5 +24,5 @@ V1 :
 - Le bot se contente d'envoyer, par l'API Bot de Telegram (requêtes sortantes) : aucun port n'est ouvert sur le serveur.
 - Une interface « canal de notification » isole Telegram : on peut la remplacer par une doublure dans les tests et ajouter d'autres canaux plus tard.
 - Les messages non envoyés (Internet coupé) restent dans une file d'attente persistante et partent au retour de la connexion (ADR-0002).
-- Configuration : le jeton du bot et les identifiants de discussion (un par utilisateur, ou un groupe) se trouvent dans le fichier de configuration.
+- Configuration : le jeton du bot et l'identifiant du **groupe Telegram commun** (les deux utilisateurs et le bot, voir ADR-0009) se trouvent dans le fichier de configuration.
 - À voir plus tard : les actions depuis Telegram (valider ou reporter une tâche). Cela demandera que le bot lise les messages reçus, ce qui reste possible sans ouvrir d'accès entrant.

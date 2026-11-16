@@ -39,7 +39,7 @@ Chaque point se clôt par un ADR dans `adr/` (modèle : `adr/0000-template.md`).
 
 - [x] **8. Stack backend** → [ADR-0007](adr/0007-stack-backend.md) : quel langage ? Python/FastAPI colle bien à l'écosystème IA, Go ou Node consomment moins de ressources. Base de données (SQLite probablement suffisante), planificateur de tâches (cron interne, APScheduler…).
 - [x] **9. Découpage interne** → [ADR-0008](adr/0008-organisation-du-code.md) : monolithe modulaire ou services séparés ? Modules pressentis : entités, tâches/calendrier, météo, agent IA, notifications, connaissances.
-- [ ] **10. Moteur de planification** : règles déterministes (saisons, seuils météo), décisions de l'IA, ou approche hybride (règles + IA qui propose, utilisateur qui valide) ?
+- [x] **10. Moteur de planification** → [ADR-0009](adr/0009-moteur-de-planification.md) : règles déterministes (saisons, seuils météo), décisions de l'IA, ou approche hybride (règles + IA qui propose, utilisateur qui valide) ?
   - *Exigence* : si l'utilisateur a choisi d'appliquer une restriction d'eau, les arrosages sont placés dans les créneaux qu'il a déclarés autorisés. On choisit le meilleur grâce à la météo (le plus frais, sans vent, sans pluie prévue juste après). Ce calcul est fait par du code, sans IA. S'il n'existe aucun créneau autorisé, la tâche est reportée et l'utilisateur est prévenu.
   - *Exigence* : **modes d'arrosage, réglés par entité** :
     - **Simple** : un arrosage par jour, avec une quantité approximative par plante.
@@ -62,7 +62,8 @@ Chaque point se clôt par un ADR dans `adr/` (modèle : `adr/0000-template.md`).
 
 ## Idées pour plus tard
 
-- **Actions depuis Telegram** : valider, reporter ou marquer une tâche comme faite directement depuis la messagerie. Ajouter aussi un canal de secours pour les alertes importantes (voir ADR-0004).
+- **Mode d'arrosage expert** : bilan hydrique (évaporation × coefficient propre à l'espèce, moins la pluie reçue), quantités en litres, plusieurs passages par jour (ADR-0009).
+- **Actions depuis Telegram** : valider, reporter ou marquer une tâche comme faite directement depuis la messagerie, et « Je prends » pour s'attribuer une tâche. Ajouter aussi un canal de secours pour les alertes importantes (voir ADR-0004).
 - **Internationalisation** : traduire l'interface, les messages et les contenus produits par l'IA, si le projet devient un produit plus ambitieux. Les textes sont regroupés dès la V1 pour faciliter ce travail (ADR-0008).
 - **Suivi de soins** : suivi rapproché d'une plante en difficulté (journal d'évolution, photos, traitements, rappels fréquents). Probablement déclenché par le statut « Malade ». C'est une fonctionnalité à part entière, au-delà de l'arrosage.
 - **Conversation avec l'IA** : poser des questions sur le jardin, via la messagerie ou l'application (exclue de la V1, voir ADR-0003).
