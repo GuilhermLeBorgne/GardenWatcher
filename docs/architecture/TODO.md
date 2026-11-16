@@ -37,7 +37,7 @@ Chaque point se clôt par un ADR dans `adr/` (modèle : `adr/0000-template.md`).
 
 ## C. Architecture du serveur
 
-- [ ] **8. Stack backend** : quel langage ? Python/FastAPI colle bien à l'écosystème IA, Go ou Node consomment moins de ressources. Base de données (SQLite probablement suffisante), planificateur de tâches (cron interne, APScheduler…).
+- [x] **8. Stack backend** → [ADR-0007](adr/0007-stack-backend.md) : quel langage ? Python/FastAPI colle bien à l'écosystème IA, Go ou Node consomment moins de ressources. Base de données (SQLite probablement suffisante), planificateur de tâches (cron interne, APScheduler…).
 - [ ] **9. Découpage interne** : monolithe modulaire ou services séparés ? Modules pressentis : entités, tâches/calendrier, météo, agent IA, notifications, connaissances.
 - [ ] **10. Moteur de planification** : règles déterministes (saisons, seuils météo), décisions de l'IA, ou approche hybride (règles + IA qui propose, utilisateur qui valide) ?
   - *Exigence* : si l'utilisateur a choisi d'appliquer une restriction d'eau, les arrosages sont placés dans les créneaux qu'il a déclarés autorisés. On choisit le meilleur grâce à la météo (le plus frais, sans vent, sans pluie prévue juste après). Ce calcul est fait par du code, sans IA. S'il n'existe aucun créneau autorisé, la tâche est reportée et l'utilisateur est prévenu.
@@ -56,6 +56,7 @@ Chaque point se clôt par un ADR dans `adr/` (modèle : `adr/0000-template.md`).
 
 - [ ] **13. Accès distant** : comment l'application web atteint le Pi hors du réseau local (Tailscale, Cloudflare Tunnel, ouverture de port) ? HTTPS, sécurité.
 - [ ] **14. Application web** : framework, application servie par le Pi ou hébergée ailleurs, PWA (mobile, hors ligne), carte (Leaflet sur fond satellite, ou plan du jardin dessiné).
+  - *Acquis* : **TypeScript sans framework**, avec Tailwind pour le CSS et Leaflet pour la carte. Le but est d'éviter de dépendre d'un framework front qui change sans cesse. Il reste à décider : l'hébergement de l'application (servie par le serveur ou ailleurs), l'outil de compilation, la PWA et le fond de carte.
 - [ ] **15. Qualité et tests** : frameworks de test, doublures pour la météo, le LLM et la messagerie (pour appliquer le TDD).
 - [ ] **16. Déploiement et exploitation** : packaging (Docker Compose ou image Pi), mises à jour, sauvegardes des données, gestion des secrets, logs et supervision.
 

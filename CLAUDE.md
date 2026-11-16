@@ -4,7 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-GardenWatcher is at the **architecture/specification stage**. There is no source code, tech stack, build system, linter, or test suite yet. Do not assume any language or framework: the stack is decision point 8, still open. Once it's chosen, update this file with the build/lint/test commands, including how to run a single test.
+GardenWatcher is at the **architecture/specification stage**. There is no source code, build system, linter, or test suite yet.
+
+The stack is chosen (ADR-0007):
+- **Backend:** Python 3.12+, FastAPI, Pydantic, SQLite (SQLAlchemy 2 and Alembic), APScheduler, httpx, pytest (with respx and time-machine), ruff, uv.
+- **Frontend:** TypeScript with no framework, Tailwind and Leaflet (TODO point 14).
+
+Once the project is initialized, update this file with the run/test/lint commands, including how to run a single test.
 
 Write specs and discussion in French to match the README unless asked otherwise.
 
@@ -18,7 +24,8 @@ Write specs and discussion in French to match the README unless asked otherwise.
 
 - **Deployment:** a self-hosted server at the user's home. For now it's an old x86 Ubuntu PC without a GPU; a Raspberry Pi (ARM) is the eventual target, so dependencies must run on both. First users are the owner and their partner (two accounts, one shared garden), with a product or paid tier kept possible later. Nothing garden-specific may be hard-coded: it all goes in configuration (ADR-0001).
 - **Offline:** garden data lives on the server. Entities and the task calendar keep working without Internet; features that need the Internet degrade gracefully (ADR-0002).
-- **Every external service sits behind a swappable interface:** AI, weather, water restrictions, messaging. This is what makes TDD possible (test doubles, recorded responses) and lets a provider be replaced later.
+- **Every external service sits behind a swappable interface:** AI, weather, water restrictions, messaging, TAXREF. In code, each is a `typing.Protocol` with a real implementation and a test double. This is what makes TDD possible and lets a provider be replaced later.
+- **Time is an injected dependency** (a clock), never read directly, so scheduling and alert tests can freeze it.
 - **AI (Claude API) is used only for:** (A) enriching an entity via web search into a schema-validated species sheet with sources, and (B) daily task planning (ADR-0003).
   - Calculations, alerts and data fetching are deterministic code, not AI.
   - The AI proposes and the user validates. Validation mode is manual, auto, or hybrid (first occurrence manual, then auto).
