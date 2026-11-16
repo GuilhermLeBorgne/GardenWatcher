@@ -14,6 +14,49 @@ Once the project is initialized, update this file with the run/test/lint command
 
 Write specs and discussion in French to match the README unless asked otherwise.
 
+## Code organisation and language (ADR-0008)
+
+**Process and modules:**
+- Everything runs as a single process (API and scheduler), with one web server worker so scheduled jobs don't run twice.
+- Modules: `garden`, `knowledge`, `tasks`, `planning`, `weather`, `water`, `notifications`, `users`, `ai`, `core`.
+- Each module has four layers:
+  - `domain/`: pure business rules with no I/O. Most TDD happens here.
+  - `services/`: use cases.
+  - `adapters/`: database and HTTP clients.
+  - `api/`: FastAPI routes.
+- A module never touches another module's tables; it goes through that module's services.
+- There's no internal event bus in V1: scheduled jobs chain the steps.
+
+**Language:**
+- **Code is in English.**
+- **The UI, Telegram messages, AI-generated content and documentation are in French.**
+- User-facing strings live in dedicated files, never inline, so that internationalisation stays cheap later.
+
+**Glossary (French domain term → name in code):**
+
+| Français | Code |
+|---|---|
+| Jardin | `Garden` |
+| Entité | `Entity` |
+| Relation entre entités | `EntityLink` |
+| Statut | `status` |
+| Fiche de connaissances | `KnowledgeSheet` |
+| Surcharge (valeur ajustée sur l'entité) | `override` |
+| Brouillon / Validée | `draft` / `validated` |
+| Tâche | `Task` |
+| Tâche proposée | `proposed` (task status) |
+| Mode de validation (manuel, auto, hybride) | `ValidationMode` (`manual`, `auto`, `hybrid`) |
+| Mode d'arrosage (simple, renforcé, expert) | `WateringMode` (`simple`, `enhanced`, `expert`) |
+| Créneau de disponibilité | `AvailabilitySlot` |
+| Restriction d'eau | `WaterRestriction` |
+| Arrêté (préfectoral) | `Decree` |
+| Source d'eau | `WaterSource` |
+| Alerte / Seuil | `Alert` / `threshold` |
+| Période sensible pour la faune (nidification) | `WildlifeSensitivePeriod` (`nesting`) |
+| Utilisateur | `User` |
+
+Update the glossary whenever a new domain concept appears.
+
 ## Architecture decision workflow
 
 - `docs/architecture/TODO.md` is the ordered checklist of the 16 architecture decisions, which follow their dependencies. It also holds requirements gathered along the way (under each point) and an « Idées pour plus tard » section for features explicitly deferred past V1. Read it first to see what's decided and what's open.
